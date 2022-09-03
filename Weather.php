@@ -2,7 +2,7 @@
 
 class Weather
 {
-   private string $key='4dff0a6b68edea6cd84c605eaa1fe43b';
+   private string $key='4dffХa6b68edea6cd84c6Х5eaa1fe43b';
    private string $lat = '46.4775';
     private string $long = '30.7326';
 
