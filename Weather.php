@@ -2,21 +2,48 @@
 
 class Weather
 {
-   private string $key='4dffХa6b68edea6cd84c6Х5eaa1fe43b';
-   private string $lat = '46.4775';
-    private string $long = '30.7326';
+    protected string $key = '6636663435306461356561323838313137366238326532386135383135396463';
+    protected string $apiKey = '';
+    protected $answer;
+    private $temp;
+    private $hum;
 
-
-    public function allRates($lat,$lng)
+    public function __construct()
     {
+        $this->apiKey = hex2bin($this->key);
+    }
 
-      $str = "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lng&units=metric&lang=uk_UA&appid=".$this->key;
+    public function prepareUrl($lat, $long): mixed
+    {
+        $str = "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$long&units=metric&lang=uk_UA&appid=" . $this->apiKey;
+        return $this->getResponce($str);
+    }
 
-        $cURL = curl_init($str);
+    public function getResponce(string $url): mixed
+    {
+        $cURL = curl_init($url);
         curl_setopt($cURL, CURLOPT_RETURNTRANSFER, 1);//не плюёся в браузер
         $bufRates = curl_exec($cURL);//выполнили
         curl_close($cURL);//закрыли
+        $this->answer = json_decode($bufRates, true);
         return ($bufRates);//массив из жсон-строки;
+    }
+
+    public function getTemp()
+    {
+        $this->temp="";
+        //$tempFeel = $data['main']['feels_like'];
+        if (isset( $this->answer['main']['temp']))
+        $this->temp = $this->answer['main']['temp'];
+        return $this->temp;
+    }
+
+    public function getHum()
+    {
+        $this->hum ="";
+        if (isset( $this->answer['main']['humidity']))
+        $this->hum = $this->answer['main']['humidity'];
+        return $this->hum;
     }
 
 
